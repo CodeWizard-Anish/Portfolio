@@ -9,7 +9,7 @@ const Button = ({ children, className = "" }) => (
     {children}
   </button>
 );
-
+const API = "https://portfolio-backend-rjy8.onrender.com";
 export default function Portfolio() {
   const [projects, setProjects] = useState([]);
 
@@ -25,7 +25,7 @@ export default function Portfolio() {
   // 🔥 Fetch projects
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/projects")
+      .get(`${API}/api/projects`)
       .then((res) => setProjects(res.data))
       .catch((err) => console.log(err));
   }, []);
@@ -43,7 +43,7 @@ export default function Portfolio() {
     e.preventDefault();
 
     axios
-      .post("http://localhost:5000/api/contact", formData)
+      .post(`${API}/api/contact`, formData)
       .then(() => {
         setSuccess(true);
         setFormData({ name: "", email: "", message: "" });
