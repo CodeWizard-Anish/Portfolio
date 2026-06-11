@@ -9,15 +9,6 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// routes
-const projectRoutes = require("./routes/projectRoutes");
-app.use("/api/projects", projectRoutes);
-const contactRoutes = require("./routes/contactRoutes");
-app.use("/api/contact", contactRoutes);
-// test route
-app.get("/", (req, res) => {
-  res.send("API is running...");
-});
 
 // DB connection
 mongoose.connect(process.env.MONGO_URI)

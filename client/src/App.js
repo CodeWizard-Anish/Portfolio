@@ -24,11 +24,23 @@ export default function Portfolio() {
 
   // 🔥 Fetch projects
   useEffect(() => {
-    axios
-      .get(`${API}/api/projects`)
-      .then((res) => setProjects(res.data))
-      .catch((err) => console.log(err));
-  }, []);
+  const featuredRepos = [
+    "Puzzle-Grove",
+    "CodeForge",
+    "codedrop-qr-share",
+  ];
+
+  axios
+    .get("https://api.github.com/users/CodeWizard-Anish/repos")
+    .then((res) => {
+      const filtered = res.data.filter((repo) =>
+        featuredRepos.includes(repo.name)
+      );
+
+      setProjects(filtered);
+    })
+    .catch((err) => console.log(err));
+}, []);
 
   // 🔥 Handle input change
   const handleChange = (e) => {
@@ -95,39 +107,36 @@ export default function Portfolio() {
 
         <div className="grid md:grid-cols-2 gap-8">
           {projects.map((project) => (
-            <motion.div
-              key={project._id}
-              whileHover={{ scale: 1.05 }}
-              className="bg-white/10 backdrop-blur-lg border border-white/10 p-6 rounded-2xl shadow-lg"
-            >
-              <div className="mb-3 text-sm text-purple-300 font-semibold">
-                🚀 Live Project
-              </div>
+  <motion.div
+    key={project.id}
+    whileHover={{ scale: 1.02 }}
+    className="bg-white/10 backdrop-blur-lg border border-white/10 p-6 rounded-2xl shadow-lg flex flex-col md:flex-row justify-between items-start gap-6"
+  >
+    <div className="flex-1">
+      <h3 className="text-2xl font-bold mb-2">
+        {project.name}
+      </h3>
 
-              <h3 className="text-2xl font-bold mb-2">
-                {project.title}
-              </h3>
+      <p className="text-slate-300 mb-4">
+        {project.description || "Project available on GitHub"}
+      </p>
 
-              <p className="text-slate-300 mb-4">
-                {project.description}
-              </p>
+      <a
+        href={project.html_url}
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Button>View Project</Button>
+      </a>
+    </div>
 
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tech.map((t, i) => (
-                  <span
-                    key={i}
-                    className="text-xs bg-purple-500/20 px-2 py-1 rounded-lg"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-
-              <a href={project.link} target="_blank" rel="noreferrer">
-                <Button>View Project</Button>
-              </a>
-            </motion.div>
-          ))}
+    <div className="flex flex-wrap gap-2 md:w-48">
+      <span className="text-xs bg-purple-500/20 px-3 py-1 rounded-lg">
+        {project.language || "JavaScript"}
+      </span>
+    </div>
+  </motion.div>
+))}
         </div>
       </section>
 
